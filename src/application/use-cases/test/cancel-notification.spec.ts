@@ -1,30 +1,30 @@
 import { InMemoryNotificationsRepository } from "@test/repositories/in-memory-notifications-repository";
-import { ReadNotification } from "./read-notification";
-import { NotificationNotFound } from "./errors/notification-not-found";
+import { CancelNotification } from "../cancel-notificaton";
+import { NotificationNotFound } from "../errors/notification-not-found";
 import { makeNotification } from "@test/factories/notification-factory";
 
-describe('Read notification', () => {
-    test('Deve ser capaz de ler uma notificação.', async () => {
+describe('Cancel notification', () => {
+    test('Deve ser capaz de cancelar uma notificação.', async () => {
         const notificationsRepository = new InMemoryNotificationsRepository();
-        const readNotification = new ReadNotification(notificationsRepository);
+        const cancelNotification = new CancelNotification(notificationsRepository);
         const notification = makeNotification();
 
         await notificationsRepository.create(notification);
-        await readNotification.execute({
+        await cancelNotification.execute({
             notificationId: notification.id
         });
 
-        expect(notificationsRepository.notifications[0].readAt).toEqual(
+        expect(notificationsRepository.notifications[0].canceledAt).toEqual(
             expect.any(Date)
         );
     });
 
-    test('Não deve ser possível ler uma notificação que não existe.', async () => {
+    test('Não deve ser possível cancelar uma notificação que não existe.', async () => {
         const notificationsRepository = new InMemoryNotificationsRepository();
-        const readNotification = new ReadNotification(notificationsRepository);
+        const cancelNotification = new CancelNotification(notificationsRepository);
 
         expect(() => {
-            return readNotification.execute({
+            return cancelNotification.execute({
                 notificationId: 'fake-notification-id',
             });
         }).rejects.toThrow(NotificationNotFound);
