@@ -13,7 +13,7 @@ export class Content {
         const isContentLengthValid = this.validateContentLength(content);
 
         if (!isContentLengthValid) {
-            throw new Error('Content length error.');
+            throw new Error('Erro no tamanho do conteúdo da sua notificação!');
         }
     
         this.content = content;
